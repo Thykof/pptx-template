@@ -4,9 +4,15 @@ from setuptools import setup
 import pptx_template
 
 
+with open('README.md', encoding='utf-8') as f:
+    long_description = f.read()
+
+
 setup(name='pptx-template-simple',
     version=pptx_template.__version__,
     description='The PowerPoint presentation builder using template.pptx (without support in cli)',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/Thykof/pptx-template',
     author='Thykof',
     author_email='thykof@protonmail.ch',
