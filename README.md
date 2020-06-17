@@ -1,4 +1,6 @@
-# pptx-template [![Build Status](https://cloud.drone.io/api/badges/skar404/pptx-template/status.svg)](https://cloud.drone.io/skar404/pptx-template)
+# pptx-template
+
+ > See https://github.com/skar404/pptx-template for original project
 
 ## Overview
 
@@ -30,36 +32,69 @@ pptx-template は pptx のテンプレートを元に、別途用意した JSON 
 
 ## Getting started
 
-```bash
-pip install pptx-template-fork
-```
+The goal of this fork is to provide a pypi package that you can use in your
+python project by calling the `pptx_template.render.render_pptx` function.
 
-### Python: 
+Some features provided by originals project
+(https://github.com/skar404/pptx-template and https://github.com/m3dev/pptx-template)
+may not work properly.
+
+### Install
+
+    pip3 install pptx_template_simple
+
+In this fork, you can render a template like this:
+
 ```python
-from pptx import Presentation
-from pptx_template.cli import process_all_slides
+from pptx_template import render
 
-ppt = Presentation('in.pptx')
-process_all_slides({
-        "0": "remove",
-        "1": {
-            "greeting": {
-                "en": "Hello!",
-                "ja": "こんにちは！"
-            },
-            "season": ["Spring", "Summer", "Autumn", "Winter"]
-        },
-}, ppt, True)
-ppt.save('out.pptx')
+input_path = 'test/data5/in.pptx'
+model = {
+    "greeting": "Hello!",
+    "client_name": "M. Melpanque"
+}
+output_path = 'test/data5/out.pptx'
+render.render_pptx(input_path, model, output_path)
 ```
 
+## Development
 
-### CLI: 
+Test manualy the package:
 
-```bash
-echo '{ "slides": [ { "greeting" : "Hello!!" } ] }' > model.json
+    python3 main.py
 
-# prepare your template file (test.pptx) which contains "{greeting}" in somewhere
+Install dependencies:
 
-pptx-template --out out.pptx --template test.pptx --model model.json
-```
+    sudo apt-get -y install python3-setuptools
+    pip3 install wheel
+    pip3 install twine
+
+Build the package:
+
+    python3 setup.py bdist_wheel
+
+Install the local build package:
+
+    pip3 install dist/pptx_template_simple-0.2.8-py3-none-any.whl
+
+Upload to test pypi:
+
+    twine upload --repository testpypi dist/*
+
+Then test your package by installing the test pypi package:
+
+    pip3 install --index-url https://test.pypi.org/simple/ --no-deps pptx_template_simple
+
+When you are ready, upload the package in the main pypi repository:
+
+    twine upload dist/*
+
+### Tests
+
+Install dependencies:
+
+    pip3 install pytest
+
+Run tests:
+
+    pytest
