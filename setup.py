@@ -19,7 +19,6 @@ setup(name='pptx-template-simple',
     license='Apache-2.0',
     packages=['pptx_template'],
     test_suite='test',
-    install_requires=['python-pptx==0.6.18', 'pandas>=0.18.0', 'openpyxl>=2.4.7', 'six==1.12.0'],
     keywords=['powerpoint', 'ppt', 'pptx', 'template'],
     classifiers=[
         "Development Status :: 3 - Alpha",
