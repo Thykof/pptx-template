@@ -27,6 +27,9 @@ def main():
         },
         "etude": {
             "objectif": "Faire 3 sites"
+        },
+        'pictures': {
+        
         }
     }
     output_path = '../propale-generated.pptx'

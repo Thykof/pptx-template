@@ -9,6 +9,7 @@ import six
 import pptx_template.pptx_util as util
 import pptx_template.text as txt
 import pptx_template.chart as ch
+import pptx_template.picture as pict
 
 log = logging.getLogger()
 
@@ -114,6 +115,13 @@ def edit_slide(slide, model, skip_model_not_found=False, clear_tags=False):
     for chart in ch.select_all_chart_shapes(slide):
         try:
             ch.load_data_into_chart(chart, model)
+        except:
+            if not skip_model_not_found:
+                raise
+
+    for pictures in pict.select_all_pictures(slide):
+        try:
+            pict.remplace_picture(slide, pictures, model)
         except:
             if not skip_model_not_found:
                 raise
