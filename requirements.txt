@@ -2,3 +2,4 @@ python-pptx
 pandas
 openpyxl
 six
+jinja2

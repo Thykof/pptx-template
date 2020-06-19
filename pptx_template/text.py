@@ -1,14 +1,19 @@
 #
 # coding=utf-8
 
+
 import logging
 import re
 import numbers
 
+
 from six import string_types
 from pptx.shapes.graphfrm import GraphicFrame
+import jinja2
+
 
 import pptx_template.pyel as pyel
+
 
 log = logging.getLogger()
 
@@ -29,6 +34,7 @@ def _iterate_els(text):
     while pos < len(text):
         text_id_match = _EL_RE.search(text[pos:])
         if text_id_match:
+            print(pos)
             pos = pos + text_id_match.end(1) + 1
             yield text_id_match.group(1)
         else:
@@ -94,7 +100,9 @@ def replace_all_els_in_text_frame(text_frame, model, clear_tags):
     """
     text_id = None
 
+    print(text_frame.text)
     for el in _iterate_els(text_frame.text):
+        print(el)
         try:
             value = pyel.eval_el(el, model)
         except ValueError:
@@ -117,6 +125,25 @@ def replace_all_els_in_text_frame(text_frame, model, clear_tags):
             log.error(
                 u"Cannot find {%s} in one text-run. To fix this, select this whole EL [%s] and reset font size by "
                 u"clicking size up then down" % (text_id, text_frame.text))
+
+def replace_all_els_in_text_frame(text_frame, model, clear_tags):
+
+    def majuscule(input):
+        return input.capitalize()
+
+    def gender(input, value):
+        return value if input == 'f' else ''
+
+    env = jinja2.Environment()
+    env.filters['majuscule'] = majuscule
+    env.filters['gender'] = gender
+    # print(str(text_frame.text))
+    for paragraph in text_frame.paragraphs:
+        for run in paragraph.runs:
+            template = env.from_string(str(run.text))
+            rendered = template.render(model)
+            # print(rendered)
+            run.text = rendered
 
 
 def _find_el_position(texts, el):
